@@ -11,6 +11,11 @@ class TimerHelper
 		);
 	}
 
+	finalize()
+	{
+		clearInterval(this.systemTimer);
+	}
+
 	initialize(universe)
 	{
 		this.systemTimer = setInterval

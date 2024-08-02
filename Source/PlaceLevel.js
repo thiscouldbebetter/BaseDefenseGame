@@ -139,6 +139,38 @@ class PlaceLevel
 
 	updateForTimerTick(universe, world)
 	{
+		var moversEnemy = this.enemies();
+
+		var hasAnEnemyReachedBase =
+			moversEnemy.some(x => x.disp.pos.x < 0);
+
+		if (hasAnEnemyReachedBase)
+		{
+			universe.display.drawTextWithColorAndHeightAtPos
+			(
+				"You lose!",
+				Color.Instances().White,
+				20,
+				new Coords(0, 0)
+			);
+			return;
+		}
+		else if (moversEnemy.length == 0)
+		{
+			if (this.moverSpawnings.length == 0)
+			{
+				universe.display.drawTextWithColorAndHeightAtPos
+				(
+					"You win!",
+					Color.Instances().White,
+					20,
+					new Coords(0, 0)
+				)
+				return;
+			}
+		}
+
+
 		var secondsSoFar = this.secondsSoFar(universe);
 
 		var spawningsThisTick = this.moverSpawnings.filter
@@ -163,24 +195,6 @@ class PlaceLevel
 			x => x.updateForTimerTick(universe, world, this, x)
 		);
 
-		var moversEnemy = this.enemies();
-		if (moversEnemy.length == 0)
-		{
-			if (this.moverSpawnings.length == 0)
-			{
-				document.write("You win!");
-				this.movers.length = 0;
-				return;
-			}
-		}
-
-		var hasAnEnemyReachedBase = moversEnemy.some(x => x.disp.pos.x < 0);
-		if (hasAnEnemyReachedBase)
-		{
-			document.write("You lose!");
-			this.movers.length = 0;
-			return;
-		}
 
 		var moversEmplacement = this.emplacements();
 		var moversProjectile = this.projectiles();
